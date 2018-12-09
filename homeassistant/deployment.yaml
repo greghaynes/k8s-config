@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: homeassistant
+  namespace: homeassistant
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: homeassistant
+    spec:
+      nodeSelector:
+        zwave: "true"
+      containers:
+      - name: homeassistant
+        image: homeassistant/home-assistant
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: /config
+          name: config-volume
+        - mountPath: /dev/ttyACM0
+          name: zwave-dev
+        securityContext:
+          privileged: true
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: config-volume
+        hostPath:
+          path: /var/lib/homeassistant
+          type: Directory
+      - name: zwave-dev
+        hostPath:
+          path: /dev/ttyACM0

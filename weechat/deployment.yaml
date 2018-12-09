@@ -1,0 +1,20 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: weechat
+  namespace: weechat
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: weechat
+    spec:
+      containers:
+      - name: weechat
+        image: docker-registry.pdxhome.greghaynes.net/weechat
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9001
+        command:
+          - /usr/bin/weechat-headless

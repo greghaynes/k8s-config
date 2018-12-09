@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: homeassistant
+  namespace: homeassistant
+  annotations:
+    kubernetes.io/ingress.class: "nginx"    
+    certmanager.k8s.io/issuer: "pdxhome-issuer"
+    certmanager.k8s.io/acme-challenge-type: http01
+spec:
+  tls:
+  - hosts:
+    - homeassistant.pdxhome.greghaynes.net
+    secretName: homeassistant-cert
+  rules:
+  - host: homeassistant.pdxhome.greghaynes.net
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: homeassistant
+          servicePort: 8123
